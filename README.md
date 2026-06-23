@@ -10,7 +10,7 @@ McColorLab is a premium, architectural-grade Minecraft palette and gradient gene
 1. **Browse**: Explore the block palette to find your desired materials.
 2. **Select**: Click a block to set your **Start** point, then click another to set your **End** point.
 3. **Configure**: Adjust the length slider to define how many steps the gradient should take.
-4. **Generate**: Click "Generate Blend" to see your calculated block path.
+4. **Generate**: Click "Generate Blend" to see your block gradient.
 
 ## Page 
 https://matteo-xd.github.io/mccolorlab/
