@@ -1,7 +1,3 @@
-/**
- * McColorLab - High-Fidelity Architectural Minecraft 1.21.11 Block Registry
- */
-
 let MINECRAFT_BLOCKS = [];
 
 function generateFullBlockDatabase() {
@@ -222,7 +218,7 @@ function generateFullBlockDatabase() {
         { id: "glowstone", name: "Glowstone", hex: "#bf9b61" },
         { id: "obsidian", name: "Obsidian", hex: "#14111e" },
         { id: "crying_obsidian", name: "Crying Obsidian", hex: "#20143a" },
-        { id: "bone_block", name: "Bone Block", hex: "#e1dbbf" }, // FIXED: Cleaned trailing characters
+        { id: "bone_block", name: "Bone Block", hex: "#e1dbbf" },
         { id: "hay_block", name: "Hay Bale", hex: "#a58e1c" },
         { id: "melon", name: "Melon Block", hex: "#597a17" },
         { id: "pumpkin", name: "Pumpkin", hex: "#c36d15" },
@@ -238,5 +234,32 @@ function generateFullBlockDatabase() {
 }
 
 function getBlockImageUrl(blockId) {
-    return `https://assets.mcasset.cloud/1.21/assets/minecraft/textures/block/${blockId}.png`;
+    let textureName = blockId;
+
+    if (textureName.startsWith("waxed_")) {
+        textureName = textureName.replace("waxed_", "");
+    }
+
+    if (textureName.endsWith("_wood")) {
+        textureName = textureName.replace("_wood", "_log");
+    } else if (textureName.endsWith("_hyphae")) {
+        textureName = textureName.replace("_hyphae", "_stem");
+    }
+
+    const sideTextureOverrides = {
+        "basalt": "basalt_side",
+        "polished_basalt": "polished_basalt_side",
+        "bone_block": "bone_block_side",
+        "hay_block": "hay_block_side",
+        "melon": "melon_side",
+        "pumpkin": "pumpkin_side",
+        "quartz_block": "quartz_block_side",
+        "purpur_pillar": "purpur_pillar"
+    };
+
+    if (sideTextureOverrides[textureName]) {
+        textureName = sideTextureOverrides[textureName];
+    }
+
+    return `https://assets.mcasset.cloud/1.21/assets/minecraft/textures/block/${textureName}.png`;
 }

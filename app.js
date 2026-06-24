@@ -4,7 +4,7 @@ let selectedEndBlock = null;
 document.addEventListener("DOMContentLoaded", () => {
     generateFullBlockDatabase();
     
-    if (MINECRAFT_BLOCKS.length > 0) {
+    if (MINECRAFT_BLOCKS && MINECRAFT_BLOCKS.length > 0) {
         // Sort items alphabetically from A-Z before rendering
         MINECRAFT_BLOCKS.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("reset-selection-btn").addEventListener("click", clearSelections);
         
         // Set fallback preview text
-        document.getElementById("gradient-result").innerHTML = "<p class='warning-msg' style='color: #666;'>Select Start and End blocks from the palette below to preview your gradient.</p>";
+        document.getElementById("gradient-result").innerHTML = "<p class='warning-msg' style='color: #747480;'>Select Start and End blocks from the palette below to preview your gradient.</p>";
     }
     
     document.getElementById("generate-btn").addEventListener("click", generateBlockGradient);
@@ -43,7 +43,7 @@ function renderPalette(blocksArray) {
     container.innerHTML = ""; 
     
     if (blocksArray.length === 0) {
-        container.innerHTML = "<p class='warning-msg'>No matching blocks found in 1.21.11 directory.</p>";
+        container.innerHTML = "<p class='warning-msg'>No matching blocks found in directory.</p>";
         return;
     }
 
@@ -106,7 +106,7 @@ function clearSelections() {
     endSlot.querySelector(".slot-image").style.backgroundImage = "none";
     endSlot.querySelector("span").textContent = "End: Select a block";
     
-    document.getElementById("gradient-result").innerHTML = "<p class='warning-msg' style='color: #666;'>Select Start and End blocks from the palette below to preview your gradient.</p>";
+    document.getElementById("gradient-result").innerHTML = "<p class='warning-msg' style='color: #747480;'>Select Start and End blocks from the palette below to preview your gradient.</p>";
 }
 
 function hexToRgb(hex) {
@@ -114,19 +114,20 @@ function hexToRgb(hex) {
     return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
 }
 
-// Added crash protection logic checking for invalid hex results
 function findClosestBlock(targetRgb, excludedIds = []) {
     let closestBlock = null;
     let minDistance = Infinity;
 
     for (let i = 0; i < MINECRAFT_BLOCKS.length; i++) {
         const block = MINECRAFT_BLOCKS[i];
+        
+        // Strictly skip blocks that are already in the gradient
         if (excludedIds.includes(block.id)) continue;
 
         const blockRgb = hexToRgb(block.hex);
-        if (!blockRgb) continue; // Skip corrupted registry items cleanly to prevent runtime loop crashes
+        if (!blockRgb) continue;
 
-        // Human eye weighted color distance matching calculation formula
+        // Human eye weighted color distance matching
         const rMean = (targetRgb.r + blockRgb.r) / 2;
         const r = targetRgb.r - blockRgb.r;
         const g = targetRgb.g - blockRgb.g;
@@ -144,6 +145,7 @@ function findClosestBlock(targetRgb, excludedIds = []) {
         }
     }
 
+    // Fallback if we somehow run out of blocks (very rare)
     return closestBlock || MINECRAFT_BLOCKS.find(b => !excludedIds.includes(b.id)) || MINECRAFT_BLOCKS[0];
 }
 
@@ -164,14 +166,18 @@ function generateBlockGradient() {
 
     let usedBlockIds = [];
 
+    if (noDuplicates) {
+        usedBlockIds.push(selectedStartBlock.id);
+        usedBlockIds.push(selectedEndBlock.id);
+    }
+
     for (let i = 0; i < steps; i++) {
         let bestMatch;
 
-        if (i === steps - 1) {
-            bestMatch = selectedEndBlock; // End block is explicitly locked on the final step
-        } else if (i === 0) {
+        if (i === 0) {
             bestMatch = selectedStartBlock;
-            usedBlockIds.push(bestMatch.id);
+        } else if (i === steps - 1) {
+            bestMatch = selectedEndBlock;
         } else {
             const t = i / (steps - 1);
             const currentRgb = {
@@ -180,8 +186,10 @@ function generateBlockGradient() {
                 b: Math.round(startRgb.b + (endRgb.b - startRgb.b) * t)
             };
 
+            // Find the closest block, passing our strict ban list
             bestMatch = findClosestBlock(currentRgb, noDuplicates ? usedBlockIds : []);
             
+            // Add this new block to the ban list so it isn't picked again
             if (noDuplicates) {
                 usedBlockIds.push(bestMatch.id);
             }

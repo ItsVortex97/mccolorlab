@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="McColorLab: An architectural-grade Minecraft color palette and seamless block gradient generator.">
     <title>McColorLab - Minecraft Palette & Gradient Generator</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <div class="theme-switch-container" id="theme-toggle-btn">
+        <button class="theme-switch-container" id="theme-toggle-btn" aria-label="Toggle Dark Mode">
             <div class="theme-toggle-box">
                 <div class="theme-toggle-handle"></div>
             </div>
             <span>Theme Switch</span>
-        </div>
+        </button>
         
         <h1>🧪 McColorLab</h1>
         <p>Click a block to set <strong>Start</strong>, then click another to set <strong>End</strong></p>
@@ -29,12 +33,12 @@
                         <div class="slot-image"></div>
                         <span>Start: Select a block</span>
                     </div>
-                    <div class="slot-arrow">➡️</div>
+                    <div class="slot-arrow" aria-hidden="true">➡️</div>
                     <div id="preview-end" class="preview-slot empty">
                         <div class="slot-image"></div>
                         <span>End: Select a block</span>
                     </div>
-                    <button id="reset-selection-btn" title="Clear selection">❌</button>
+                    <button id="reset-selection-btn" title="Clear selection" aria-label="Clear block selections">❌</button>
                 </div>
 
                 <div class="control-group slider-group">
@@ -53,7 +57,7 @@
                 <button id="generate-btn">Generate Blend</button>
             </div>
             
-            <div id="gradient-result" class="gradient-output"></div>
+            <div id="gradient-result" class="gradient-output" aria-live="polite"></div>
         </section>
 
         <section id="palette-section">
@@ -69,6 +73,7 @@
     <script src="app.js"></script>
 
     <script>
+        // Kept your theme logic intact
         document.getElementById('theme-toggle-btn').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
         });
