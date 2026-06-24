@@ -254,7 +254,9 @@ function getBlockImageUrl(blockId) {
         "melon": "melon_side",
         "pumpkin": "pumpkin_side",
         "quartz_block": "quartz_block_side",
-        "purpur_pillar": "purpur_pillar"
+        "purpur_pillar": "purpur_pillar",
+        "chiseled_quartz": "chiseled_quartz_block",
+        "smooth_quartz": "quartz_block_bottom"
     };
 
     if (sideTextureOverrides[textureName]) {
