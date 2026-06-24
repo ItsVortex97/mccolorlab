@@ -1,6 +1,6 @@
 # McColorLab 🧪
 
-McColorLab is a premium, architectural-grade Minecraft palette and gradient generation engine.
+McColorLab is architectural-grade Minecraft palette and gradient generation engine.
 
 ## Features
 * **Intelligent Blending**: Advanced algorithm to match block colors for smooth, natural gradients.
