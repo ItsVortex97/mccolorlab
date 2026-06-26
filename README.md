@@ -13,4 +13,4 @@ McColorLab is architectural-grade Minecraft palette and gradient generation engi
 4. **Generate**: Click "Generate Blend" to see generated block gradient.
 
 ## Page 
-https://matteo-xd.github.io/mccolorlab/
+https://itsvortex97.github.io/mccolorlab/
